@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
-var userSchema = new Schema({
+var UserSchema = new Schema({
 	email: {type: String, required: true, unique: true},
 	passwordDigest: {type: String, required: true},
 	createdAt: {type: Date, default: Date.now()},
@@ -12,7 +12,7 @@ var userSchema = new Schema({
 
 UserSchema.statics.createSecure = function(email, password, cb){
 	var _this = this;
-	bycrypt.genSalt(function(err, salt)){
+	bcrypt.genSalt(function(err, salt){
 		bcrypt.hash(password, salt, function(err, hash){
 			var user = {
 				email: email,
@@ -24,7 +24,7 @@ UserSchema.statics.createSecure = function(email, password, cb){
 };
 
 UserSchema.statics.authenticate = function(emailOrUsername, password, cb){
-	this.findOne({$or[{email: emailOrUsername}, {username: emailOrUsername}]}, function(err, user){
+	this.findOne({$or:[{email: emailOrUsername}, {username: emailOrUsername}]}, function(err, user){
 		if(user === null){
 			cb("Sorry, who's that?", null);
 		}else if(user.checkPassword(password)){
