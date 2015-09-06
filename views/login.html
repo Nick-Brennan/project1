@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Twitter Lounge Login</title>
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap.min.css">
+	<script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="static/js/login.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<form action="/login" method="POST">
+				<input type="email" name="user[email]" placeholder="email" required />
+				<input type="password" name="user[password]" placeholder="password"required />
+				<button>Login</button>
+			</form>	
+			<br/>	<!-- Button trigger modal -->
+			<button type="button" data-toggle="modal" data-target="#myModal" style="display: inline">
+			  Sign Up!
+			</button>
+		</div>
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Twitter Lounge Signup</h4>
+			      </div>
+			      <div class="modal-footer">
+			      	<form action="/signup" method="POST">
+				  		<input type="email" name="user[email]" placeholder="email" required />
+				  		<input type="password" name="user[password]" placeholder="password" required />
+				        <input type="submit" class="btn btn-primary" value="Sign Up!"/>
+			        </form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		
+	</div>
+</body>
+</html>
