@@ -2,8 +2,24 @@
 <html>
 <head>
 	<title>Twitter Lounge Chat</title>
+	<link rel="stylesheet" type="text/css" href="static/css/chat.css"/>
+	<script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+	<script type="text/javascript" src="static/js/chat.js"></script>
 </head>
 <body>
 	<h1>You've made it to the chat</h1>
+	<div id="chatDiv">
+	<div id="chatScreen">
+		<ul id="messages"></ul>
+	</div>
+		<form action="" id="chatButton">
+			<input id="m" autocomplete="off" /><button>Send</button>
+		</form>
+	</div>
+	<br/>
+	<form action="/logout" method="POST">
+		<input type="submit" value="LogOut"/>
+	</form>
 </body>
 </html>
