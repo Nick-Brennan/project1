@@ -2,14 +2,13 @@ $(function(){
 	tagPage();
 
 	var socket = io();
-	socket.id = 123;
 	$('#chatButton').submit(function(){
 		socket.emit('chat message', {message : $('#m').val(), userId: userID});
 		$('#m').val('');
 		return false;
 	});
 	socket.on('chat message', function(msg){
-		$('#messages').prepend($('<li>').text(msg));
+		$('#messages').prepend($('<li>').html(msg));
 	});
 });
 

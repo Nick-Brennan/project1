@@ -38,6 +38,15 @@ app.use(function(req, res, next){
 
 	next();
 });
+///***Colors for chat text***//////////////////////
+var colorAssignment = {};
+
+
+var colors = ['#690410', "#041069", "#692a04", '#106904', '#690443', '#04695d']
+var colorIndex = 0;
+
+///***Active Users***/////////////////////////////
+var activeUsers = {};
 
 ///***Routes***///////////////////////////////////
 app.get(['/', '/login'], function(req, res){
@@ -70,11 +79,17 @@ app.post(['/api/users', '/signup'], function(req, res){
 	var password = user.password;
 	db.User.createSecure(email, password, function(err, newUser){
 		if(err){
-			console.log(err)
+			console.log(err);
+			res.redirect('/');
 		}else if(user === []){
 			res.redirect('/');
 		}else{
 			req.login(newUser);
+			if(colorIndex === colors.length){
+				colorIndex = 0;
+			}
+			colorAssignment[newUser._id] = colors[colorIndex];
+			colorIndex++;
 			console.log("New user's ID set in session at signup" + req.session.userId);
 			res.redirect('/chat');
 		}
@@ -89,11 +104,17 @@ app.post(['/api/sessions', '/login'], function(req, res){
 	db.User.authenticate(email, password, function(err, validatedUser){
 		if(err){
 			console.log(err)
+			res.redirect('/login');
 		}else if(user === []){
 			res.redirect('/login');
 		}else{
 			console.log("Here's the authenticated user: " + validatedUser)
 			req.login(validatedUser);
+			if(colorIndex === colors.length){
+				colorIndex = 0;
+			}
+			colorAssignment[validatedUser._id] = colors[colorIndex];
+			colorIndex++;
 			console.log("Session ID after being set in login: " + req.session.userId);
 			res.redirect('/chat');
 			
@@ -111,7 +132,9 @@ io.on('connection', function(socket){
 	console.log('a user connected');
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
-			io.emit('chat message', (user.email + "--" +  msgObj.message));
+			io.emit('chat message', ('<b style="color:' 
+				+ colorAssignment[user._id] + ';">' + user.email 
+				+ " -- </b>" +  msgObj.message));
 		})
 		console.log('message: ' + msgObj.userId);
 		

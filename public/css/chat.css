@@ -1,9 +1,69 @@
-#chatDiv{height: 500px; width: 600px; margin: 10px; padding: 5px; font: 13px Helvetica, Arial;}
-#chatDiv form{background: #000; padding: 3px; width: 100%;}
-#chatDiv form input{border: 0; padding: 10px; width: 90%; margin-right: .5%;}
-#chatDiv form button{width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px}
-#chatScreen{height: 300px; border: 2px solid black; overflow: auto;}
-#messages{list-style-type: none; margin: 0; padding: 0;}
-#messages li{padding: 5px 10px; color: green;}
-#messages li:nth-child(odd){background: #eee}
-#messages li:first-child{font-size: 18px; padding-top: 15px; padding-left: 10px;}
+body{
+	background-color: #BAD7F7;
+}
+h1{
+	padding-left: 60px;
+}
+#topSpace{
+	height: 30px;
+	background-color: #A1D490
+}
+
+#chatDiv{
+	height: 80%;
+/*	 width: 70%; */
+	 /*margin: 10px; */
+	 padding: 5px; 
+	 font: 13px Helvetica, Arial;
+}
+#chatDiv form{
+	background: #000;
+	padding: 2px;
+}
+#chatDiv form input{
+	padding: 10px;
+	width: 90%; 
+	/*margin-right: .5%;*/
+}
+#chatDiv form button{
+	width: 10%; 
+	background: #9ac3a3; 
+	border-left: solid 1px black; 
+	padding: 10px
+}
+#chatScreen{
+	height: 450px; 
+	border: 2px solid black;
+	background-color: #fff; 
+	overflow: auto;
+}
+#messages{
+	list-style-type: none; 
+	margin: 0; 
+	padding: 0;
+}
+#messages li{
+	padding: 5px 10px; 
+}
+#messages li:nth-child(odd){
+	background: #efe;
+}
+#messages li:first-child{
+	font-size: 18px;
+	padding-top: 15px; 
+	padding-left: 10px; 
+	color: green;
+}
+#rightMenu{
+	margin: 0;
+	height: 510px;
+	background-color: #A1D490;
+}
+#bottomFill{
+	background-color: #A1D490;
+	height: 100px;
+	margin: 0;
+}
+
+
+
