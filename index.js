@@ -7,6 +7,16 @@ var path = require('path');
 var views = path.join(process.cwd(), "views"); 
 var db = require('./models');
 var io = require('socket.io')(http);
+var Twit = require('twit');
+
+var T = new Twit({
+    consumer_key:         '3oB9fLbCqGncbwyxt62DJAPV2'
+  , consumer_secret:      'trCQIZLCuqJmt9jZ5FNyh7Zy8xgsdj4UEyTN6GPswtciUv1rNq'
+  , access_token:         '17026573-xxzsMD2d6wVYp84UXMCWkCMnfR1uP8wSviN6LvFfT'
+  , access_token_secret:  'AwlK0faTRaDp96vbD54yYXvfRxvOTVR9p4HRGFJjRBcWB'
+});
+
+T.setAuth(T.getAuth);
 
 app.use("/static", express.static("public"));
 app.use("/vendor", express.static("bower_components"));
@@ -38,15 +48,15 @@ app.use(function(req, res, next){
 
 	next();
 });
-///***Colors for chat text***//////////////////////
+///***Colors for Chat Text***//////////////////////
 var colorAssignment = {};
-
 
 var colors = ['#690410', "#041069", "#692a04", '#106904', '#690443', '#04695d']
 var colorIndex = 0;
 
 ///***Active Users***/////////////////////////////
-var activeUsers = {};
+var activeUsers = [];
+var activeSockets = [];
 
 ///***Routes***///////////////////////////////////
 app.get(['/', '/login'], function(req, res){
@@ -60,7 +70,6 @@ app.get('/chat', function(req, res){
 		}else if(user === null){
 			res.redirect('/login');
 		}else{
-			console.log("Here's our user found in chat: " + user);
 			res.sendFile(views + "/chat.html");
 		}
 	});
@@ -70,6 +79,10 @@ app.get('/api/ids', function(req, res){
 	req.currentUser(function(err, user){
 		res.send(user);
 	})
+});
+
+app.get('/api/users', function(req, res){
+	res.send(activeUsers);
 });
 
 app.post(['/api/users', '/signup'], function(req, res){
@@ -90,7 +103,7 @@ app.post(['/api/users', '/signup'], function(req, res){
 			}
 			colorAssignment[newUser._id] = colors[colorIndex];
 			colorIndex++;
-			console.log("New user's ID set in session at signup" + req.session.userId);
+			activeUsers.push(newUser);
 			res.redirect('/chat');
 		}
 	});
@@ -108,28 +121,31 @@ app.post(['/api/sessions', '/login'], function(req, res){
 		}else if(user === []){
 			res.redirect('/login');
 		}else{
-			console.log("Here's the authenticated user: " + validatedUser)
 			req.login(validatedUser);
 			if(colorIndex === colors.length){
 				colorIndex = 0;
 			}
 			colorAssignment[validatedUser._id] = colors[colorIndex];
 			colorIndex++;
-			console.log("Session ID after being set in login: " + req.session.userId);
-			res.redirect('/chat');
-			
-			// res.send(validatedUser);
+			activeUsers.push(validatedUser);
+			console.log(activeUsers);
+			res.redirect('/chat');		
 		}
 	});
 });
 
 app.post('/logout', function(req, res){
+	// req.currentUser(function(err, user){
+	// 	var userIndex = activeUsers.map(function(activeUser){return activeUser._id;}).indexOf(user._id);
+	// 	activeUsers.splice(userIndex, 1);
+	// });
 	req.logout();
 	res.redirect('/login');
 });
 
 io.on('connection', function(socket){
 	console.log('a user connected');
+	activeSockets.push(socket);
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
 			io.emit('chat message', ('<b style="color:' 
@@ -139,10 +155,20 @@ io.on('connection', function(socket){
 		console.log('message: ' + msgObj.userId);
 		
 	});
-	socket.on('disconnect', function(){
+	socket.on('disconnect', function(data){
+		var index = activeSockets.indexOf(socket);
+		activeSockets.splice(index, 1);
+		activeUsers.splice(index, 1);
 		console.log('user split');
 	});
 });
+
+var stream = T.stream('statuses/filter', { track: ['#jquery', '#express.js', '#mongodb', '#mongoose.js', '#node.js', '#express-session', '#body-parser', 'general assembly', '#bootstrap'], language: 'en' })
+
+stream.on('tweet', function (tweet) {
+  console.log(tweet.text);
+  io.emit('tweet', tweet.text);
+})
 
 http.listen(3000, function(){
 	console.log("Twitter Lounge is listening on port 3000");

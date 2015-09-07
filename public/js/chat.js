@@ -10,6 +10,13 @@ $(function(){
 	socket.on('chat message', function(msg){
 		$('#messages').prepend($('<li>').html(msg));
 	});
+	getUsers();
+
+	socket.on('tweet', function(tweet){
+		$('#tweetPlaceholder').prepend($('<li>').text(tweet));
+	})
+
+	setInterval(getUsers, 2000);
 });
 
 var userID;
@@ -20,3 +27,20 @@ function tagPage(){
 		userID = req._id;
 	})
 };
+
+function getUsers(){
+	$.get('/api/users', function(req, res){
+		$('#usernamesPlaceholder').empty();
+		console.log(req);
+		console.log(req[0].email);
+		var template = _.template($('#userListTemplate').html());
+		console.log(template);
+		req.forEach(function(user){
+			$('#usernamesPlaceholder').append(template(user));
+		});
+	});
+};
+
+// function checkIn(){
+// 	socket.emit('in chat', {id: userID});
+// }

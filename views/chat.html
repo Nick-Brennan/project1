@@ -6,23 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Twitter Lounge Chat</title>
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css"/>
 	<link rel="stylesheet" type="text/css" href="static/css/chat.css"/>
 	<script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="vendor/underscore/underscore-min.js"></script>
 	<script type="text/javascript" src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<script type="text/javascript" src="static/js/chat.js"></script>
 </head>
 <body>
 	<div class="page-header">
-		<h1>Nick's Chat (beta)</h1>
+		<h1>Nick's Chat (alpha)</h1>
 			
 	</div>
 	<div class="container">
 		<div id="topSpace" class="row">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-6" id="twitterScreen"><ul id="tweetPlaceholder"></ul></div>
 			<form action="/logout" method="POST">
 				<input id="logoutButton" type="submit" value="LogOut" class="pull-right" />
 			</form>	
+			<h4>Curently all up in here</h4>
 		</div>
 		<div class="row">
 			<div id="chatDiv" class="col-sm-8">
@@ -35,11 +39,13 @@
 			</div>
 			<div id="rightMenu" class="col-sm-4">
 				
+				<ul id="usernamesPlaceholder"></ul>
 			</div>
 			<div id="bottomFill" class="col-sm-12"></div>
 		</div>
-		<br/>
-		
 	</div>
+	<script type="text/template" id="userListTemplate">
+		<li id="<%=_id%>"> <%=email%> </li>
+	</script>
 </body>
 </html>
