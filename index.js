@@ -143,13 +143,28 @@ app.post('/logout', function(req, res){
 	res.redirect('/login');
 });
 
+app.put('/api/users', function(req, res){
+	req.currentUser(function(err, user){
+		user.username = req.body.username;
+		user.imageURL = req.body.imgURL;
+		db.User.update({_id: user._id}, user, function(err, updated){
+			if(err){
+				console.log(err);
+			}else{
+				console.log(updated);
+				res.sendStatus(200);
+			}
+		});
+	})
+});
+
 io.on('connection', function(socket){
 	console.log('a user connected');
 	activeSockets.push(socket);
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
-			io.emit('chat message', ('<b style="color:' 
-				+ colorAssignment[user._id] + ';">' + user.email 
+			io.emit('chat message', ("<img width='50px' src='"+user.imageURL+"'>" + '<b style="color:' 
+				+ colorAssignment[user._id] + ';"> ' + user.email 
 				+ " -- </b>" +  msgObj.message));
 		})
 		console.log('message: ' + msgObj.userId);
@@ -163,11 +178,10 @@ io.on('connection', function(socket){
 	});
 });
 
-var stream = T.stream('statuses/filter', { track: ['#jquery', '#express.js', '#mongodb', '#mongoose.js', '#node.js', '#express-session', '#body-parser', 'general assembly', '#bootstrap'], language: 'en' })
+var stream = T.stream('statuses/filter', { track: ['#node.js', '#socket.io', '#javascript', '#bootstrap', "#ajax", "#express-session", "#utmb", "#oswalt"], language: 'en' })
 
 stream.on('tweet', function (tweet) {
-  console.log(tweet.text);
-  io.emit('tweet', tweet.text);
+  io.emit('tweet', tweet);
 })
 
 http.listen(3000, function(){

@@ -13,7 +13,7 @@ $(function(){
 	getUsers();
 
 	socket.on('tweet', function(tweet){
-		$('#tweetPlaceholder').prepend($('<li>').text(tweet));
+		$('#tweetPlaceholder').prepend('<li><img height="25px" src="' + tweet.user.profile_image_url + '">' + tweet.text + '</li>');
 	})
 
 	setInterval(getUsers, 2000);
@@ -23,7 +23,6 @@ var userID;
 
 function tagPage(){
 	$.get('/api/ids', function(req, res){
-		console.log(req._id);
 		userID = req._id;
 	})
 };
@@ -31,16 +30,35 @@ function tagPage(){
 function getUsers(){
 	$.get('/api/users', function(req, res){
 		$('#usernamesPlaceholder').empty();
-		console.log(req);
-		console.log(req[0].email);
 		var template = _.template($('#userListTemplate').html());
-		console.log(template);
 		req.forEach(function(user){
 			$('#usernamesPlaceholder').append(template(user));
 		});
 	});
 };
 
-// function checkIn(){
-// 	socket.emit('in chat', {id: userID});
-// }
+function updateProfile(){
+	$('#updateButton').click(function(e){
+		e.preventDefault();
+	});
+
+	var userData = {};
+	userData.username = $('#username').val();
+	userData.imgURL = $('#imgURL').val();
+
+	console.log(userData);
+
+	$.ajax({
+		url: "/api/users",
+		type: "PUT",
+		data: userData,
+		success: function(){
+			$('#profileModal').modal('hide');
+		}
+	})
+}
+
+
+
+
+

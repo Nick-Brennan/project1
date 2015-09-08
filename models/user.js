@@ -7,7 +7,7 @@ var UserSchema = new Schema({
 	passwordDigest: {type: String, required: true},
 	createdAt: {type: Date, default: Date.now()},
 	username: String,
-	imageURL: String
+	imageURL: {type: String, default: 'http://livestreaming4u.com/wp-content/uploads/2014/10/eintsein-face-technician.jpg'}
 });
 
 UserSchema.statics.createSecure = function(email, password, cb){

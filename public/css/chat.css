@@ -6,7 +6,7 @@ h1{
 }
 .page-header{
 	padding: 5px;
-	margin-top: 5px;
+	margin-top: 0;
 	margin-bottom: 0;
 }
 #topSpace{
@@ -72,7 +72,7 @@ h1{
 }
 #rightMenu{
 	margin: 0;
-	height: 403px;
+	height: 406px;
 	background-color: #A1D490;
 }
 #bottomFill{
@@ -80,11 +80,29 @@ h1{
 	height: 20px;
 	margin: 0;
 }
-h4{
+#sendButton{
+	padding: 3px;
+}
+h3{
 	text-align: center;
 	padding-left: 50px;
 	margin-top: 100px;
 	margin-left: 30px;
+	background-color: rgba(191, 180, 180, 0.2);
+}
+img{
+	display: inline-block;
+}
+.nav{
+	padding: 3px;
+	margin: 3px;
+}
+#birdPic{
+	padding-top: 20%;
+	margin: auto;
+}
+#birdWraper{
+	margin: auto;
 }
 
 
