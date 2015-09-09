@@ -163,8 +163,9 @@ io.on('connection', function(socket){
 	activeSockets.push(socket);
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
+			var handle = (user.username) ? user.username : user.email
 			io.emit('chat message', ("<img width='50px' src='"+user.imageURL+"'>" + '<b style="color:' 
-				+ colorAssignment[user._id] + ';"> ' + user.email 
+				+ colorAssignment[user._id] + ';"> ' + handle
 				+ " -- </b>" +  msgObj.message));
 		})
 		console.log('message: ' + msgObj.userId);
