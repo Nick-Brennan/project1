@@ -4,7 +4,9 @@ $(function(){
 
 	var socket = io();
 	tagPage();
-	
+	socket.on('fetchUser', function(){
+		socket.emit('sendUser', {userId: userID});
+	});
 	$('#chatButton').submit(function(){
 		socket.emit('chat message', {message : $('#messageInput').val(), userId: userID});
 		$('#messageInput').val('');
@@ -25,7 +27,7 @@ $(function(){
 	})
 
 	getUsers();
-	setInterval(getUsers, 2000);
+	setInterval(getUsers, 500);
 });
 
 
@@ -33,15 +35,17 @@ $(function(){
 function tagPage(){
 	$.get('/api/ids', function(req, res){
 		userID = req._id;
-		socket.emit('sendId', {theUser: req._id});
 	})
 };
 
-function getUsers(){
-	$.get('/api/users', function(req, res){
+function getUsers(){	
+	$.get('/api/users', function(req, res){	
 		$('#usernamesPlaceholder').empty();
 		var template = _.template($('#userListTemplate').html());
-		req.forEach(function(user){
+		var array = $.map(req, function(value, index) {
+		    return value;
+		});
+		array.forEach(function(user){
 			$('#usernamesPlaceholder').append(template(user));
 		});
 	});

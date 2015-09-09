@@ -55,6 +55,7 @@ var colors = ['#690410', "#07525A",  "#B1B038", "#D1225F", "#041069", "#692a04",
 var colorIndex = 0;
 
 ///***Active Users***/////////////////////////////
+var activeChaters = {};
 var activeUsers = [];
 var activeSockets = [];
 
@@ -82,7 +83,7 @@ app.get('/api/ids', function(req, res){
 });
 
 app.get('/api/users', function(req, res){
-	res.send(activeUsers);
+	res.send(activeChaters);
 });
 
 app.post(['/api/users', '/signup'], function(req, res){
@@ -103,7 +104,6 @@ app.post(['/api/users', '/signup'], function(req, res){
 			}
 			colorAssignment[newUser._id] = colors[colorIndex];
 			colorIndex++;
-			activeUsers.push(newUser);
 			res.redirect('/chat');
 		}
 	});
@@ -127,18 +127,12 @@ app.post(['/api/sessions', '/login'], function(req, res){
 			}
 			colorAssignment[validatedUser._id] = colors[colorIndex];
 			colorIndex++;
-			activeUsers.push(validatedUser);
-			console.log(activeUsers);
 			res.redirect('/chat');		
 		}
 	});
 });
 
 app.post('/logout', function(req, res){
-	// req.currentUser(function(err, user){
-	// 	var userIndex = activeUsers.map(function(activeUser){return activeUser._id;}).indexOf(user._id);
-	// 	activeUsers.splice(userIndex, 1);
-	// });
 	req.logout();
 	res.redirect('/login');
 });
@@ -151,7 +145,6 @@ app.put('/api/users', function(req, res){
 			if(err){
 				console.log(err);
 			}else{
-				console.log(updated);
 				res.sendStatus(200);
 			}
 		});
@@ -159,9 +152,11 @@ app.put('/api/users', function(req, res){
 });
 
 io.on('connection', function(socket){
-	activeSockets.push(socket);
-	socket.on('sendId', function(userId){
-		console.log("socket ID: " + socket.id + " - and user ID: " + userId.theUser);
+	socket.emit('fetchUser');
+	socket.on('sendUser', function(userInfo){
+		db.User.findOne({_id: userInfo.userId}, function(err, user){
+			activeChaters[socket.id] = user;
+		});
 	});
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
@@ -169,13 +164,10 @@ io.on('connection', function(socket){
 			io.emit('chat message', ("<img width='50px' src='"+user.imageURL+"'>" + '<b style="color:' 
 				+ colorAssignment[user._id] + ';"> ' + handle
 				+ " -- </b>" +  msgObj.message));
-		})
-		console.log('message: ' + msgObj.userId);	
+		})	
 	});
 	socket.on('disconnect', function(data){
-		var index = activeSockets.indexOf(socket);
-		activeSockets.splice(index, 1);
-		activeUsers.splice(index, 1);
+		delete activeChaters[socket.id];
 		console.log('user split');
 	});
 });
