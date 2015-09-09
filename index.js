@@ -51,7 +51,7 @@ app.use(function(req, res, next){
 ///***Colors for Chat Text***//////////////////////
 var colorAssignment = {};
 
-var colors = ['#690410', "#041069", "#692a04", '#106904', '#690443', '#04695d']
+var colors = ['#690410', "#07525A",  "#B1B038", "#D1225F", "#041069", "#692a04", "#385FBB", "#68963A", '#690443', '#04695d']
 var colorIndex = 0;
 
 ///***Active Users***/////////////////////////////
@@ -178,7 +178,7 @@ io.on('connection', function(socket){
 	});
 });
 
-var stream = T.stream('statuses/filter', { track: ['#node.js', '#socket.io', '#javascript', '#bootstrap', "#ajax", "#express-session", "#utmb", "#oswalt"], language: 'en' })
+var stream = T.stream('statuses/filter', { track: ['#running', '#trailrunning', '#ultrarunning', '#5k', "#10k", "#socket.io", "#utmb", "#oswalt"], language: 'en' })
 
 stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);

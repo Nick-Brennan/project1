@@ -15,11 +15,10 @@
 	<script type="text/javascript" src="static/js/chat.js"></script>
 </head>
 <body>
-	<div class="page-header">
-		<h1>Twitter Lounge <small>version 0.1</small></h1>
-			
-	</div>
 	<div class="container">
+	<div class="page-header">
+		<h1>Twitter Lounge <small>version 0.1</small></h1>			
+	</div>	
 		<div id="topSpace" class="row">
 			<div class="col-xs-2">
 				<div id="birdWraper">
@@ -46,8 +45,7 @@
 					<input id="m" autocomplete="off" /><button id="sendButton" class="btn btn-default">Send</button>
 				</form>
 			</div>
-			<div id="rightMenu" class="col-xs-4">
-				
+			<div id="rightMenu" class="col-xs-4">				
 				<ul id="usernamesPlaceholder"></ul>
 			</div>
 			<div id="bottomFill" class="col-xs-12"></div>
@@ -55,23 +53,23 @@
 	</div>
 
 <!-- Profile Modal -->
-			<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">Twitter Lounge Profile</h4>
-			      </div>
-			      <div class="modal-footer">
-			      	<form>
-				  		<input name="username" id="username" placeholder="username"  />
-				  		<input name="imgURL" id="imgURL" placeholder="Image URL" />
-				        <input id="updateButton" onclick="updateProfile()" class="btn btn-primary" value="Update"/>
-			        </form>
-			      </div>
-			    </div>
-			  </div>
-			</div>
+	<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Twitter Lounge Profile</h4>
+	      </div>
+	      <div class="modal-footer">
+	      	<form>
+		  		<input name="username" id="username" placeholder="username"  />
+		  		<input name="imgURL" id="imgURL" placeholder="Image URL" />
+		        <input id="updateButton" onclick="updateProfile()" class="btn btn-primary" value="Update"/>
+	        </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 <!--Underscore Template-->	
 	<script type="text/template" id="userListTemplate">
 		<li id="<%=_id%>"> <%=email%> </li>

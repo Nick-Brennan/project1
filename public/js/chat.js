@@ -13,7 +13,10 @@ $(function(){
 	getUsers();
 
 	socket.on('tweet', function(tweet){
-		$('#tweetPlaceholder').prepend('<li><img height="25px" src="' + tweet.user.profile_image_url + '">' + tweet.text + '</li>');
+	    var str = tweet.text;
+	    var regex = /(https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\.]*(\?\S+)?)?)?)/g
+	    var replaced_text = str.replace(regex, "<a target='_blank' href='$1'>$1</a>");
+		$('#tweetPlaceholder').prepend('<li><img height="25px" src="' + tweet.user.profile_image_url + '">' + replaced_text + '</li>');
 	})
 
 	setInterval(getUsers, 2000);
