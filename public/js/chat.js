@@ -1,7 +1,10 @@
+var userID;
+
 $(function(){
-	tagPage();
 
 	var socket = io();
+	tagPage();
+	
 	$('#chatButton').submit(function(){
 		socket.emit('chat message', {message : $('#messageInput').val(), userId: userID});
 		$('#messageInput').val('');
@@ -25,11 +28,12 @@ $(function(){
 	setInterval(getUsers, 2000);
 });
 
-var userID;
+
 
 function tagPage(){
 	$.get('/api/ids', function(req, res){
 		userID = req._id;
+		socket.emit('sendId', {theUser: req._id});
 	})
 };
 

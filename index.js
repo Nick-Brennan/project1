@@ -159,8 +159,10 @@ app.put('/api/users', function(req, res){
 });
 
 io.on('connection', function(socket){
-	console.log('a user connected');
 	activeSockets.push(socket);
+	socket.on('sendId', function(userId){
+		console.log("socket ID: " + socket.id + " - and user ID: " + userId.theUser);
+	});
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
 			var handle = (user.username) ? user.username : user.email
@@ -168,8 +170,7 @@ io.on('connection', function(socket){
 				+ colorAssignment[user._id] + ';"> ' + handle
 				+ " -- </b>" +  msgObj.message));
 		})
-		console.log('message: ' + msgObj.userId);
-		
+		console.log('message: ' + msgObj.userId);	
 	});
 	socket.on('disconnect', function(data){
 		var index = activeSockets.indexOf(socket);
