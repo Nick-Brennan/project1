@@ -3,14 +3,16 @@ $(function(){
 
 	var socket = io();
 	$('#chatButton').submit(function(){
-		socket.emit('chat message', {message : $('#m').val(), userId: userID});
-		$('#m').val('');
+		socket.emit('chat message', {message : $('#messageInput').val(), userId: userID});
+		$('#messageInput').val('');
 		return false;
 	});
 	socket.on('chat message', function(msg){
 		$('#messages').prepend($('<li>').html(msg));
+		var ding = new Audio('static/tim_tum.mp3');
+		ding.volume = 0.75;
+		ding.play();
 	});
-	getUsers();
 
 	socket.on('tweet', function(tweet){
 	    var str = tweet.text;
@@ -19,6 +21,7 @@ $(function(){
 		$('#tweetPlaceholder').prepend('<li><img height="25px" src="' + tweet.user.profile_image_url + '">' + replaced_text + '</li>');
 	})
 
+	getUsers();
 	setInterval(getUsers, 2000);
 });
 
