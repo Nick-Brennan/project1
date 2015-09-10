@@ -105,11 +105,18 @@ img{
 	margin: 3px;
 }
 #birdPic{
-	padding-top: 20%;
-	margin: auto;
+	max-width: 100%;
+	min-width: 60px;
+	height: auto;
+	width: auto;
+	padding-top: 25%;
+	margin-left: 0px;
 }
 #birdWraper{
-	margin: auto;
+	max-width: 200px;
+}
+#usernamesPlaceholder{
+	word-wrap: break-word;
 }
 
 
