@@ -1,3 +1,4 @@
+///***Including Dependencies***//////////////////////////////////////////////
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -9,6 +10,8 @@ var db = require('./models');
 var io = require('socket.io')(http);
 var Twit = require('twit');
 
+///***Twit Middleware for Twitter Streaming API Setup***/////////////////////
+
 var T = new Twit({
     consumer_key:         '3oB9fLbCqGncbwyxt62DJAPV2'
   , consumer_secret:      'trCQIZLCuqJmt9jZ5FNyh7Zy8xgsdj4UEyTN6GPswtciUv1rNq'
@@ -17,6 +20,8 @@ var T = new Twit({
 });
 
 T.setAuth(T.getAuth);
+
+///***Additional Middleware and File Path Setup***///////////////////////////
 
 app.use("/static", express.static("public"));
 app.use("/vendor", express.static("bower_components"));
@@ -51,15 +56,23 @@ app.use(function(req, res, next){
 ///***Colors for Chat Text***//////////////////////
 var colorAssignment = {};
 
-var colors = ['#690410', "#07525A",  "#B1B038", "#D1225F", "#041069", "#692a04", "#385FBB", "#68963A", '#690443', '#04695d']
+var colors = ['#690410', 
+				"#07525A",
+				"#B1B038",
+				"#D1225F", 
+				"#041069", 
+				"#692a04", 
+				"#385FBB", 
+				"#68963A", 
+				'#690443', 
+				'#04695d'];
 var colorIndex = 0;
 
 ///***Active Users***/////////////////////////////
 var activeChaters = {};
-var activeUsers = [];
-var activeSockets = [];
 
-///***Routes***///////////////////////////////////
+
+///***Routes***////////////////////////////////////////////////////////////////
 app.get(['/', '/login'], function(req, res){
 	res.sendFile(views + "/login.html");
 });
@@ -88,7 +101,6 @@ app.get('/api/users', function(req, res){
 
 app.post(['/api/users', '/signup'], function(req, res){
 	var user = req.body.user;
-	console.log("Signup - posted user object: "+req.body.user)
 	var email = user.email;
 	var password = user.password;
 	db.User.createSecure(email, password, function(err, newUser){
@@ -111,7 +123,6 @@ app.post(['/api/users', '/signup'], function(req, res){
 
 app.post(['/api/sessions', '/login'], function(req, res){
 	var user = req.body.user;
-	console.log("Login - posted user object: " + user.email)
 	var email = user.email;
 	var password = user. password;
 	db.User.authenticate(email, password, function(err, validatedUser){
@@ -151,6 +162,8 @@ app.put('/api/users', function(req, res){
 	})
 });
 
+///***Socket Handlers***///////////////////////////////////////////
+
 io.on('connection', function(socket){
 	socket.emit('fetchUser');
 	socket.on('sendUser', function(userInfo){
@@ -160,7 +173,7 @@ io.on('connection', function(socket){
 	});
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
-			var handle = (user.username) ? user.username : user.email
+			var handle = user.username ? user.username : user.email;
 			io.emit('chat message', ("<img width='50px' src='"+user.imageURL+"'>" + '<b style="color:' 
 				+ colorAssignment[user._id] + ';"> ' + handle
 				+ " -- </b>" +  msgObj.message));
@@ -172,11 +185,21 @@ io.on('connection', function(socket){
 	});
 });
 
-var stream = T.stream('statuses/filter', { track: ['#running', '#trailrunning', '#ultrarunning', '#5k', "#10k", "#socket.io", "#utmb", "#oswalt"], language: 'en' })
+///***Twitter Stream***/////////////////////////////////////////////
+
+var stream = T.stream('statuses/filter', { track: ['#running', 
+													'#trailrunning',
+													 '#ultrarunning', 
+													 '#5k', "#10k",
+													  "#socket.io", 
+													  "#utmb", 
+													  "#oswalt"], language: 'en' })
 
 stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);
 })
+
+///***Server Setup***//////////////////////////////////////////////
 
 http.listen(3000, function(){
 	console.log("Twitter Lounge is listening on port 3000");

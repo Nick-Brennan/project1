@@ -1,12 +1,16 @@
+
 var userID;
 
 $(function(){
+	tagPage();
 
 	var socket = io();
-	tagPage();
+	
+
 	socket.on('fetchUser', function(){
 		socket.emit('sendUser', {userId: userID});
 	});
+
 	$('#chatButton').submit(function(){
 		socket.emit('chat message', {message : $('#messageInput').val(), userId: userID});
 		$('#messageInput').val('');
@@ -18,15 +22,15 @@ $(function(){
 		ding.volume = 0.75;
 		ding.play();
 	});
-
 	socket.on('tweet', function(tweet){
 	    var str = tweet.text;
 	    var regex = /(https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\.]*(\?\S+)?)?)?)/g
 	    var replaced_text = str.replace(regex, "<a target='_blank' href='$1'>$1</a>");
-		$('#tweetPlaceholder').prepend('<li><img height="25px" src="' + tweet.user.profile_image_url + '">' + replaced_text + '</li>');
-	})
+		$('#tweetPlaceholder').prepend('<li><img height="25px" src="' 
+										+ tweet.user.profile_image_url
+										 + '">' + replaced_text + '</li>');
+	});
 
-	getUsers();
 	setInterval(getUsers, 500);
 });
 
