@@ -201,7 +201,7 @@ stream.on('tweet', function (tweet) {
 
 ///***Server Setup***//////////////////////////////////////////////
 
-http.listen(3000, function(){
+http.listen(process.env.port || 3000, function(){
 	console.log("Twitter Lounge is listening on port 3000");
 });
 
