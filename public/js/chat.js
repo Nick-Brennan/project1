@@ -1,27 +1,32 @@
 
+//keeping the ID handy for use with sockets
 var userID;
 
+//***documnet.ready()***///////////////////////////////////////////////////////
 $(function(){
 	tagPage();
 
+//create a socket & connect/////////////
 	var socket = io();
 	
-
+//after connecting, send back user ID/////
 	socket.on('fetchUser', function(){
 		socket.emit('sendUser', {userId: userID});
 	});
-
+//send chat message to server via socket//
 	$('#chatButton').submit(function(){
 		socket.emit('chat message', {message : $('#messageInput').val(), userId: userID});
 		$('#messageInput').val('');
 		return false;
 	});
+//take chat messages broadcast from server and render them///
 	socket.on('chat message', function(msg){
 		$('#messages').prepend($('<li>').html(msg));
 		var ding = new Audio('static/tim_tum.mp3');
 		ding.volume = 0.75;
 		ding.play();
 	});
+
 	socket.on('tweet', function(tweet){
 	    var str = tweet.text;
 	    var regex = /(https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\.]*(\?\S+)?)?)?)/g
@@ -34,7 +39,7 @@ $(function(){
 	setInterval(getUsers, 500);
 });
 
-
+//***Utility Functions***///////////////////////////////////////////////
 
 function tagPage(){
 	$.get('/api/ids', function(req, res){

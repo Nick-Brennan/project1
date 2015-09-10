@@ -103,6 +103,7 @@ img{
 .nav{
 	padding: 3px;
 	margin: 3px;
+	font-family: 'Candal';
 }
 #birdPic{
 	max-width: 100%;
@@ -117,6 +118,7 @@ img{
 }
 #usernamesPlaceholder{
 	word-wrap: break-word;
+	font-family: 'Candal';
 }
 
 
