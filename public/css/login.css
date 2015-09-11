@@ -1,0 +1,11 @@
+body{
+	background-color: #A1D490;
+}
+.jumbotron{
+	height: 500px;
+	background-image: url(http://2.bp.blogspot.com/-uR7ycctCSKA/UXlO5llWpoI/AAAAAAAACYA/PelAGmCywD0/s400/BirdBath_Wiki.jpg);
+	background-size: contain;
+}
+#encourage{
+	color: white;
+}

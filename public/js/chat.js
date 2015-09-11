@@ -31,9 +31,9 @@ $(function(){
 	    var str = tweet.text;
 	    var regex = /(https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\.]*(\?\S+)?)?)?)/g
 	    var replaced_text = str.replace(regex, "<a target='_blank' href='$1'>$1</a>");
-		$('#tweetPlaceholder').prepend('<li><img height="25px" src="' 
+		$('#tweetPlaceholder').prepend('<li class="pull-left"><img height="25px" src="' 
 										+ tweet.user.profile_image_url
-										 + '">' + replaced_text + '</li>');
+										 + '">  <div id="tweetText">'  + replaced_text + '</div></li>');
 	});
 
 	setInterval(getUsers, 500);
