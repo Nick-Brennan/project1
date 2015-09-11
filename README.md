@@ -7,4 +7,4 @@
 ##### From back to front (sort of): MongoDB, Node.js, Express.js, Twit, Socket.io, Express-session, Bcrypt, jQuery, HTML, CSS. 
 ---
 ## Planned Features
-##### 
+##### At present, the key words used to configure the live Twitter stream are hard coded on the back end. The next iteration of the project will expose those key words via an "Admin" page, giving a site administrator the ability to change to stream on the fly. Eventualy, the addition of a "Lobby" and dynamically created and configured rooms will be implemented, giving the user full control of their experience. Room information and recent chat history will be stored in the data-base so that they can be recalled. The ability to login using a Twitter account and tweet directly from the chat will also be added.
