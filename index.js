@@ -187,13 +187,16 @@ io.on('connection', function(socket){
 
 ///***Twitter Stream***/////////////////////////////////////////////
 
-var stream = T.stream('statuses/filter', { track: ['#running', 
-													'#trailrunning',
-													 '#ultrarunning', 
-													 '#5k', "#10k",
-													  "#socket.io", 
-													  "#utmb", 
-													  "#oswalt"], language: 'en' })
+var stream = T.stream('statuses/filter', { track: ["#running",
+													"#tech",
+													"#developer", 
+													"#jquery",
+													"#mongoDB", 
+													"#heroku",
+													"#javascript",
+													"@pattonoswalt", 
+													"#patton", 
+													"#oswalt"], language: 'en' })
 
 stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);
