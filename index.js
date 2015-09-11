@@ -187,8 +187,7 @@ io.on('connection', function(socket){
 
 ///***Twitter Stream***/////////////////////////////////////////////
 
-var stream = T.stream('statuses/filter', { track: ["#running",
-													"#tech",
+var stream = T.stream('statuses/filter', { track: [	"#generalassembly",
 													"#developer", 
 													"#jquery",
 													"#mongoDB", 
@@ -197,6 +196,7 @@ var stream = T.stream('statuses/filter', { track: ["#running",
 													"@pattonoswalt", 
 													"#patton", 
 													"#oswalt"], language: 'en' })
+													
 
 stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);
