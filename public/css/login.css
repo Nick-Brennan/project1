@@ -3,10 +3,12 @@ body{
 }
 .jumbotron{
 	height: 500px;
-	background-image: url(http://2.bp.blogspot.com/-uR7ycctCSKA/UXlO5llWpoI/AAAAAAAACYA/PelAGmCywD0/s400/BirdBath_Wiki.jpg);
+	background-image: url('../bgStairs.jpg');
 	background-size: cover;
 }
 #encourage{
 	color: white;
 	text-shadow: 1px 1px 2px black; 
 }
+
+/*http://2.bp.blogspot.com/-uR7ycctCSKA/UXlO5llWpoI/AAAAAAAACYA/PelAGmCywD0/s400/BirdBath_Wiki.jpg*/

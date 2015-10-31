@@ -10,13 +10,15 @@ var db = require('./models');
 var io = require('socket.io')(http);
 var Twit = require('twit');
 
+require('dotenv').load();
+
 ///***Twit Middleware for Twitter Streaming API Setup***/////////////////////
 
 var T = new Twit({
-    consumer_key:         '3oB9fLbCqGncbwyxt62DJAPV2'
-  , consumer_secret:      'trCQIZLCuqJmt9jZ5FNyh7Zy8xgsdj4UEyTN6GPswtciUv1rNq'
-  , access_token:         '17026573-xxzsMD2d6wVYp84UXMCWkCMnfR1uP8wSviN6LvFfT'
-  , access_token_secret:  'AwlK0faTRaDp96vbD54yYXvfRxvOTVR9p4HRGFJjRBcWB'
+    consumer_key:         process.env.CON_KEY
+  , consumer_secret:      process.env.CON_SEC
+  , access_token:         process.env.ACC_TOK
+  , access_token_secret:  process.env.ACC_TOK_SEC
 });
 
 T.setAuth(T.getAuth);
@@ -28,7 +30,7 @@ app.use("/vendor", express.static("bower_components"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(
 	session({
-		secret: 'secret-key',
+		secret: process.env.SEC_KEY,
 		resave: false,
 		saveUninitialized: true
 	})
@@ -187,15 +189,7 @@ io.on('connection', function(socket){
 
 ///***Twitter Stream***/////////////////////////////////////////////
 
-var stream = T.stream('statuses/filter', { track: [	"#generalassembly",
-													"#developer", 
-													"#jquery",
-													"#mongoDB", 
-													"#heroku",
-													"#javascript",
-													"@pattonoswalt", 
-													"#patton", 
-													"#oswalt"], language: 'en' })
+var stream = T.stream('statuses/filter', { track: ['irunfar','ultrarunning','trailrunning','niketrail','hokaoneone','distancerunning','USL_tv','dylanbo', 'sfrunco','magicquid','gary_robbins','sallymcrae','thegingerrunner','afvarner','milelong_legs','1jorgemaravilla','robkrar','sagecanaday','scottjurek','ultrarunnerpodcast','jasonschlarb','USLtv','aravaiparunning'], language: 'en' })
 													
 
 stream.on('tweet', function (tweet) {
