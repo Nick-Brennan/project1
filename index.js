@@ -5,7 +5,7 @@ var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var path = require('path');
-var views = path.join(process.cwd(), "views"); 
+var views = path.join(process.cwd(), "views");
 var db = require('./models');
 var io = require('socket.io')(http);
 var Twit = require('twit');
@@ -15,10 +15,10 @@ require('dotenv').load();
 ///***Twit Middleware for Twitter Streaming API Setup***/////////////////////
 
 var T = new Twit({
-    consumer_key:         process.env.CON_KEY
-  , consumer_secret:      process.env.CON_SEC
-  , access_token:         process.env.ACC_TOK
-  , access_token_secret:  process.env.ACC_TOK_SEC
+    consumer_key:         process.env.CON_KEY,
+    consumer_secret:      process.env.CON_SEC,
+    access_token:         process.env.ACC_TOK,
+    access_token_secret:  process.env.ACC_TOK_SEC
 });
 
 T.setAuth(T.getAuth);
@@ -58,15 +58,15 @@ app.use(function(req, res, next){
 ///***Colors for Chat Text***//////////////////////
 var colorAssignment = {};
 
-var colors = ['#690410', 
+var colors = ['#690410',
 				"#07525A",
 				"#B1B038",
-				"#D1225F", 
-				"#041069", 
-				"#692a04", 
-				"#385FBB", 
-				"#68963A", 
-				'#690443', 
+				"#D1225F",
+				"#041069",
+				"#692a04",
+				"#385FBB",
+				"#68963A",
+				'#690443',
 				'#04695d'];
 var colorIndex = 0;
 
@@ -82,7 +82,7 @@ app.get(['/', '/login'], function(req, res){
 app.get('/chat', function(req, res){
 	req.currentUser(function(err, user){
 		if(err){
-			console.log(err)
+			console.log(err);
 		}else if(user === null){
 			res.redirect('/login');
 		}else{
@@ -94,7 +94,7 @@ app.get('/chat', function(req, res){
 app.get('/api/ids', function(req, res){
 	req.currentUser(function(err, user){
 		res.send(user);
-	})
+	});
 });
 
 app.get('/api/users', function(req, res){
@@ -129,7 +129,7 @@ app.post(['/api/sessions', '/login'], function(req, res){
 	var password = user. password;
 	db.User.authenticate(email, password, function(err, validatedUser){
 		if(err){
-			console.log(err)
+			console.log(err);
 			res.redirect('/login');
 		}else if(user === []){
 			res.redirect('/login');
@@ -140,7 +140,7 @@ app.post(['/api/sessions', '/login'], function(req, res){
 			}
 			colorAssignment[validatedUser._id] = colors[colorIndex];
 			colorIndex++;
-			res.redirect('/chat');		
+			res.redirect('/chat');
 		}
 	});
 });
@@ -161,7 +161,7 @@ app.put('/api/users', function(req, res){
 				res.sendStatus(200);
 			}
 		});
-	})
+	});
 });
 
 ///***Socket Handlers***///////////////////////////////////////////
@@ -176,10 +176,10 @@ io.on('connection', function(socket){
 	socket.on('chat message', function(msgObj){
 		db.User.findOne({_id: msgObj.userId}, function(err, user){
 			var handle = user.username ? user.username : user.email;
-			io.emit('chat message', ("<img width='50px' src='"+user.imageURL+"'>" + '<b style="color:' 
-				+ colorAssignment[user._id] + ';"> ' + handle
-				+ " -- </b>" +  msgObj.message));
-		})	
+			io.emit('chat message', ("<img width='50px' src='"+user.imageURL+"'>" + '<b style="color:' +
+      colorAssignment[user._id] + ';"> ' +
+      handle+ " -- </b>" +  msgObj.message));
+		});
 	});
 	socket.on('disconnect', function(data){
 		delete activeChaters[socket.id];
@@ -189,17 +189,15 @@ io.on('connection', function(socket){
 
 ///***Twitter Stream***/////////////////////////////////////////////
 
-var stream = T.stream('statuses/filter', { track: ['irunfar','ultrarunning','trailrunning','niketrail','hokaoneone','distancerunning','USL_tv','dylanbo', 'sfrunco','magicquid','gary_robbins','sallymcrae','thegingerrunner','afvarner','milelong_legs','1jorgemaravilla','robkrar','sagecanaday','scottjurek','ultrarunnerpodcast','jasonschlarb','USLtv','aravaiparunning'], language: 'en' })
-													
+var stream = T.stream('statuses/filter', { track: ['irunfar','ultrarunning','trailrunning','niketrail','hokaoneone','distancerunning','USL_tv','dylanbo', 'sfrunco','magicquid','gary_robbins','sallymcrae','thegingerrunner','afvarner','milelong_legs','1jorgemaravilla','robkrar','sagecanaday','scottjurek','ultrarunnerpodcast','jasonschlarb','USLtv','aravaiparunning'], language: 'en' });
+
 
 stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);
-})
+});
 
 ///***Server Setup***//////////////////////////////////////////////
 
 http.listen(process.env.PORT || 3000, function(){
 	console.log("Twitter Lounge is listening on port " + (process.env.PORT || 3000));
 });
-
-
